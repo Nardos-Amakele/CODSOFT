@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Calculator</title>
+  <link rel="stylesheet" href="Calcstyle.css">
+</head>
+<body>
+  <div class="calc-container">
+    <input type="text" id="display" class="calc-display" readonly>
+    <button class="buttons" onclick="updateDisplay('7')">7</button>
+    <button class="buttons" onclick="updateDisplay('8')">8</button>
+    <button class="buttons" onclick="updateDisplay('9')">9</button>
+    <button class="buttons operations" onclick="setOperation('/')">/</button>
+    <button class="buttons" onclick="updateDisplay('4')">4</button>
+    <button class="buttons" onclick="updateDisplay('5')">5</button>
+    <button class="buttons" onclick="updateDisplay('6')">6</button>
+    <button class="buttons operations" onclick="setOperation('*')">*</button>
+    <button class="buttons" onclick="updateDisplay('1')">1</button>
+    <button class="buttons" onclick="updateDisplay('2')">2</button>
+    <button class="buttons" onclick="updateDisplay('3')">3</button>
+    <button class="buttons operations" onclick="setOperation('-')">-</button>
+    <button class="buttons" onclick="updateDisplay('0')">0</button>
+    <button class="buttons" onclick="updateDisplay('.')">.</button>
+    <button class="buttons operations" onclick="calculateResult()">=</button>
+    <button class="buttons operations" onclick="setOperation('+')">+</button>
+    <button class="buttons" onclick="clearScreen()">C</button>
+  </div>
+
+  <script>
+    let currentInput = '';
+    let firstOperand = null;
+    let operations = null;
+    const display = document.getElementById('display');
+
+    function updateDisplay(value) {
+      currentInput += value;
+      display.value = currentInput;
+    }
+
+    function clearScreen() {
+      currentInput = '';
+      firstOperand = null;
+      operations = null;
+      display.value = '';
+    }
+
+    function setOperation(op) {
+      if (currentInput === '') return;
+      firstOperand = parseFloat(currentInput);
+      operations = op;
+      currentInput += ' ' + op + ' ';
+      display.value = currentInput;
+    }
+
+    function calculateResult() {
+      if (currentInput === '' || firstOperand === null || operations === null) return;
+      const secondOperand = parseFloat(currentInput.split(' ').pop());
+      let result = 0;
+      
+      switch (operations) {
+        case '+':
+          result = firstOperand + secondOperand;
+          break;
+        case '-':
+          result = firstOperand - secondOperand;
+          break;
+        case '*':
+          result = firstOperand * secondOperand;
+          break;
+        case '/':
+          if (secondOperand === 0) {
+            display.value = 'Error';
+            currentInput = '';
+            firstOperand = null;
+            operations = null;
+            return;
+          }
+          result = firstOperand / secondOperand;
+          break;
+      }
+
+      display.value = result;
+      currentInput = '' + result;
+      firstOperand = null;
+      operations = null;
+    }
+  </script>
+</body>
+</html>
